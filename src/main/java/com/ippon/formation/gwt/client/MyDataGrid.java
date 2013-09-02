@@ -1,7 +1,8 @@
 package com.ippon.formation.gwt.client;
 
 import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.RootLayoutPanel;
+import com.ippon.formation.gwt.client.widget.MySampleDataGrid;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -9,7 +10,7 @@ import com.google.gwt.user.client.ui.RootPanel;
 public class MyDataGrid implements EntryPoint {
 
 	public void onModuleLoad() {
-		MySampleDataGrid dataGrid = new MySampleDataGrid();
-		RootPanel.get().add(dataGrid.asWidget());
+		MySampleDataGrid datagrid = new MySampleDataGrid();
+		RootLayoutPanel.get().add(datagrid);
 	}
 }

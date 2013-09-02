@@ -1,12 +1,12 @@
 /*
  * Copyright 2010 Google Inc.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -15,13 +15,6 @@
  */
 package com.ippon.formation.gwt.shared;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.Random;
-import com.google.gwt.view.client.HasData;
-import com.google.gwt.view.client.ListDataProvider;
-
-import com.ippon.formation.gwt.shared.DataBaseConstants;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -29,6 +22,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.Random;
+import com.google.gwt.view.client.HasData;
+import com.google.gwt.view.client.ListDataProvider;
 
 /**
  * The data source for contact information used in the sample.
@@ -163,7 +161,7 @@ public class ContactDatabase {
 
 	/**
 	 * Get the singleton instance of the contact database.
-	 * 
+	 *
 	 * @return the singleton instance
 	 */
 	public static ContactDatabase get() {
@@ -176,7 +174,7 @@ public class ContactDatabase {
 	/**
 	 * The provider that holds the list of contacts in the database.
 	 */
-	private ListDataProvider<ContactInfo> dataProvider = new ListDataProvider<ContactInfo>();
+	private final ListDataProvider<ContactInfo> dataProvider = new ListDataProvider<ContactInfo>();
 
 	private final Category[] categories;
 
@@ -190,7 +188,7 @@ public class ContactDatabase {
 	 */
 	private ContactDatabase() {
 		// Initialize the categories.
-		DataBaseConstants constants = GWT.create(DataBaseConstants.class);
+		LocalizedConstants constants = GWT.create(LocalizedConstants.class);
 		String[] catNames = constants.contactDatabaseCategories();
 		categories = new Category[catNames.length];
 		for (int i = 0; i < catNames.length; i++) {
@@ -203,7 +201,7 @@ public class ContactDatabase {
 
 	/**
 	 * Add a new contact.
-	 * 
+	 *
 	 * @param contact
 	 *            the contact to add.
 	 */
@@ -215,9 +213,19 @@ public class ContactDatabase {
 	}
 
 	/**
+	 * Remove a contact.
+	 *
+	 * @param contact
+	 * 			  the contact to remove.
+	 */
+	public void removeContact(ContactInfo contact) {
+		dataProvider.getList().remove(contact);
+	}
+
+	/**
 	 * Add a display to the database. The current range of interest of the
 	 * display will be populated with data.
-	 * 
+	 *
 	 * @param display
 	 *            a {@Link HasData}.
 	 */
@@ -228,7 +236,7 @@ public class ContactDatabase {
 	/**
 	 * Generate the specified number of contacts and add them to the data
 	 * provider.
-	 * 
+	 *
 	 * @param count
 	 *            the number of contacts to generate.
 	 */
@@ -245,7 +253,7 @@ public class ContactDatabase {
 
 	/**
 	 * Get the categories in the database.
-	 * 
+	 *
 	 * @return the categories in the database
 	 */
 	public Category[] queryCategories() {
@@ -254,7 +262,7 @@ public class ContactDatabase {
 
 	/**
 	 * Query all contacts for the specified category.
-	 * 
+	 *
 	 * @param category
 	 *            the category
 	 * @return the list of contacts in the category
@@ -272,7 +280,7 @@ public class ContactDatabase {
 	/**
 	 * Query all contacts for the specified category that begin with the
 	 * specified first name prefix.
-	 * 
+	 *
 	 * @param category
 	 *            the category
 	 * @param firstNamePrefix
@@ -293,7 +301,7 @@ public class ContactDatabase {
 
 	/**
 	 * Query the list of friends for the specified contact.
-	 * 
+	 *
 	 * @param contact
 	 *            the contact
 	 * @return the friends of the contact
@@ -323,7 +331,7 @@ public class ContactDatabase {
 
 	/**
 	 * Create a new random {@link ContactInfo}.
-	 * 
+	 *
 	 * @return the new {@link ContactInfo}.
 	 */
 	@SuppressWarnings("deprecation")
@@ -353,7 +361,7 @@ public class ContactDatabase {
 
 	/**
 	 * Get the next random value from an array.
-	 * 
+	 *
 	 * @param array
 	 *            the array
 	 * @return a random value in the array
