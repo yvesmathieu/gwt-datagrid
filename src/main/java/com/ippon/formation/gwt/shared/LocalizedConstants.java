@@ -24,21 +24,6 @@ public interface LocalizedConstants extends Constants {
 	@Key("contact.database.categories")
 	String[] contactDatabaseCategories();
 
-	@Key("last.name")
-	String lastName();
-
-	@Key("first.name")
-	String firstName();
-
-	@Key("age")
-	String age();
-
-	@Key("address")
-	String address();
-
-	@Key("category")
-	String category();
-
-	@Key("nothing.to.display")
-	String nothingToDisplay();
+	@Key("welcome.msg")
+	String welcomeMsg();
 }
