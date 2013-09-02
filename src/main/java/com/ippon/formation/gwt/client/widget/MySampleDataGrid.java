@@ -1,6 +1,7 @@
 package com.ippon.formation.gwt.client.widget;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import com.google.gwt.cell.client.EditTextCell;
@@ -14,6 +15,7 @@ import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.cellview.client.Column;
+import com.google.gwt.user.cellview.client.ColumnSortEvent.ListHandler;
 import com.google.gwt.user.cellview.client.DataGrid;
 import com.google.gwt.user.cellview.client.SafeHtmlHeader;
 import com.google.gwt.user.cellview.client.SimplePager;
@@ -59,21 +61,29 @@ public class MySampleDataGrid extends Composite {
 		dataGrid = new DataGrid<ContactInfo>(ContactInfo.KEY_PROVIDER);
 		dataGrid.setEmptyTableWidget(new Label(constants.nothingToDisplay()));
 
+		// SortHandler
+		ListHandler<ContactInfo> sortHandler = new ListHandler<ContactInfo>(
+				ContactDatabase.get().getDataProvider().getList());
+		dataGrid.addColumnSortHandler(sortHandler);
+
 		// Pager
 		pager = new SimplePager(TextLocation.CENTER, false, 0, true);
 		pager.setDisplay(dataGrid);
 
 		// Init columns.
-		initColumns();
+		initColumns(sortHandler);
 
 		// Add the Datagrid to the adapter in the database.
 		ContactDatabase.get().addDataDisplay(dataGrid);
 	}
 
 	/**
-	 * Initialize table columns.
+	 * Initialize columns.
+	 *
+	 * @param sortHandler
+	 * 				the datagrid's sort handler to bind.
 	 */
-	private void initColumns() {
+	private void initColumns(ListHandler<ContactInfo> sortHandler) {
 		// First name.
 		Column<ContactInfo, String> firstNameColumn = new Column<ContactInfo, String>(
 				new EditTextCell()) {
@@ -83,7 +93,13 @@ public class MySampleDataGrid extends Composite {
 			}
 		};
 		firstNameColumn.setSortable(true);
-		dataGrid.addColumn(firstNameColumn, constants.firstName());
+		sortHandler.setComparator(firstNameColumn,
+				new Comparator<ContactInfo>() {
+					public int compare(ContactInfo o1, ContactInfo o2) {
+						return o1.getFirstName().compareTo(o2.getFirstName());
+					}
+				});
+		dataGrid.addColumn(firstNameColumn, "First name");
 		firstNameColumn
 				.setFieldUpdater(new FieldUpdater<ContactInfo, String>() {
 					public void update(int index, ContactInfo object,
@@ -104,7 +120,13 @@ public class MySampleDataGrid extends Composite {
 			}
 		};
 		lastNameColumn.setSortable(true);
-		dataGrid.addColumn(lastNameColumn, constants.lastName());
+		sortHandler.setComparator(lastNameColumn,
+				new Comparator<ContactInfo>() {
+					public int compare(ContactInfo o1, ContactInfo o2) {
+						return o1.getLastName().compareTo(o2.getLastName());
+					}
+				});
+		dataGrid.addColumn(lastNameColumn, "Last name");
 		lastNameColumn.setFieldUpdater(new FieldUpdater<ContactInfo, String>() {
 			public void update(int index, ContactInfo object, String value) {
 				// onValueChange in cell
@@ -123,8 +145,13 @@ public class MySampleDataGrid extends Composite {
 			}
 		};
 		ageColumn.setSortable(true);
+		sortHandler.setComparator(ageColumn, new Comparator<ContactInfo>() {
+			public int compare(ContactInfo o1, ContactInfo o2) {
+				return o1.getBirthday().compareTo(o2.getBirthday());
+			}
+		});
 		dataGrid.addColumn(ageColumn,
-				new SafeHtmlHeader(SafeHtmlUtils.fromSafeConstant(constants.age())));
+				new SafeHtmlHeader(SafeHtmlUtils.fromSafeConstant("Age")));
 		dataGrid.setColumnWidth(ageColumn, 5, Unit.PCT);
 
 		// Category.
@@ -141,7 +168,7 @@ public class MySampleDataGrid extends Composite {
 				return object.getCategory().getDisplayName();
 			}
 		};
-		dataGrid.addColumn(categoryColumn, constants.category());
+		dataGrid.addColumn(categoryColumn, "Category");
 		categoryColumn.setFieldUpdater(new FieldUpdater<ContactInfo, String>() {
 			public void update(int index, ContactInfo object, String value) {
 				for (Category category : categories) {
@@ -163,8 +190,12 @@ public class MySampleDataGrid extends Composite {
 			}
 		};
 		addressColumn.setSortable(true);
-		dataGrid.addColumn(addressColumn, constants.address());
-		dataGrid.setColumnWidth(addressColumn, 38, Unit.PCT);
+		sortHandler.setComparator(addressColumn, new Comparator<ContactInfo>() {
+			public int compare(ContactInfo o1, ContactInfo o2) {
+				return o1.getAddress().compareTo(o2.getAddress());
+			}
+		});
+		dataGrid.addColumn(addressColumn, "Address");
+		dataGrid.setColumnWidth(addressColumn, 55, Unit.PCT);
 	}
-
 }
