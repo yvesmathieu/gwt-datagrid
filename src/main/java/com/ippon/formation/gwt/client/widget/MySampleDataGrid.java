@@ -16,10 +16,11 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.DataGrid;
 import com.google.gwt.user.cellview.client.SafeHtmlHeader;
+import com.google.gwt.user.cellview.client.SimplePager;
+import com.google.gwt.user.cellview.client.SimplePager.TextLocation;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.view.client.Range;
 import com.ippon.formation.gwt.shared.ContactDatabase;
 import com.ippon.formation.gwt.shared.ContactDatabase.Category;
 import com.ippon.formation.gwt.shared.ContactInfo;
@@ -40,6 +41,9 @@ public class MySampleDataGrid extends Composite {
 	@UiField(provided = true)
 	DataGrid<ContactInfo> dataGrid;
 
+	@UiField(provided = true)
+	SimplePager pager;
+
 	/**
 	 * Default constructor.
 	 */
@@ -55,7 +59,9 @@ public class MySampleDataGrid extends Composite {
 		dataGrid = new DataGrid<ContactInfo>(ContactInfo.KEY_PROVIDER);
 		dataGrid.setEmptyTableWidget(new Label(constants.nothingToDisplay()));
 
-		dataGrid.setVisibleRange(new Range(0, 1000));
+		// Pager
+		pager = new SimplePager(TextLocation.CENTER, false, 0, true);
+		pager.setDisplay(dataGrid);
 
 		// Init columns.
 		initColumns();

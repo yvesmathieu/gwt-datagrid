@@ -9,5 +9,9 @@
 			<!-- DataGrid. -->
 			<c:DataGrid ui:field='dataGrid' visible="true" />
 		</g:center>
+		<g:south size="25">
+			<!-- Pager. -->
+			<c:SimplePager ui:field='pager' styleName="{style.pager}"/>
+		</g:south>
 	</g:DockLayoutPanel>
 </ui:UiBinder>
