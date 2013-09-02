@@ -41,4 +41,10 @@ public interface LocalizedConstants extends Constants {
 
 	@Key("nothing.to.display")
 	String nothingToDisplay();
+
+	@Key("delete.attempt")
+	String deleteAttempt();
+
+	@Key("birth.date")
+	String birthDate();
 }

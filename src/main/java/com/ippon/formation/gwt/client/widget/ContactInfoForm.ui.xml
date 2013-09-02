@@ -1,0 +1,23 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder
+  xmlns:ui="urn:ui:com.google.gwt.uibinder"
+  xmlns:g="urn:import:com.google.gwt.user.client.ui"
+  xmlns:dp="urn:import:com.google.gwt.user.datepicker.client">
+  <ui:style src="../resources/MyDataGrid.css" />
+  <ui:with type="com.ippon.formation.gwt.shared.LocalizedConstants" field="msg"/>
+
+  <g:LayoutPanel>
+  	<g:layer>
+  		<g:HTMLPanel styleName="{style.contactForm}">
+			<g:Label text="{msg.firstName}" /><g:TextBox ui:field="firstNameTextBox"/>
+			<g:Label text="{msg.lastName}" /><g:TextBox ui:field="lastNameTextBox"/>
+			<g:Label text="{msg.birthDate}" /><dp:DateBox ui:field="birthDatePicker" />
+			<g:Label text="{msg.category}" /><g:ListBox ui:field="categoryListBox"/>
+			<g:Label text="{msg.address}" /><g:TextBox ui:field="addressTextBox"/>
+			<br />
+			<br />
+			<g:Button text="Add contact" ui:field="addContactButton"/>
+  		</g:HTMLPanel>
+	</g:layer>
+  </g:LayoutPanel>
+</ui:UiBinder>

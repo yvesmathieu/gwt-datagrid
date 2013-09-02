@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+import com.google.gwt.cell.client.ActionCell;
+import com.google.gwt.cell.client.ActionCell.Delegate;
 import com.google.gwt.cell.client.EditTextCell;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.cell.client.NumberCell;
@@ -20,6 +22,7 @@ import com.google.gwt.user.cellview.client.DataGrid;
 import com.google.gwt.user.cellview.client.SafeHtmlHeader;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.SimplePager.TextLocation;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
@@ -54,6 +57,11 @@ public class MySampleDataGrid extends Composite {
 		initWidget(uiBinder.createAndBindUi(this));
 	}
 
+	@Override
+	public Widget asWidget() {
+		return this;
+	}
+
 	/**
 	 * Initialize datagrid.
 	 */
@@ -73,7 +81,7 @@ public class MySampleDataGrid extends Composite {
 		// Init columns.
 		initColumns(sortHandler);
 
-		// Add the Datagrid to the adapter in the database.
+		// Add the CellList to the adapter in the database.
 		ContactDatabase.get().addDataDisplay(dataGrid);
 	}
 
@@ -81,7 +89,7 @@ public class MySampleDataGrid extends Composite {
 	 * Initialize columns.
 	 *
 	 * @param sortHandler
-	 * 				the datagrid's sort handler to bind.
+	 * 				the datagris's sort handler to bind.
 	 */
 	private void initColumns(ListHandler<ContactInfo> sortHandler) {
 		// First name.
@@ -99,7 +107,7 @@ public class MySampleDataGrid extends Composite {
 						return o1.getFirstName().compareTo(o2.getFirstName());
 					}
 				});
-		dataGrid.addColumn(firstNameColumn, "First name");
+		dataGrid.addColumn(firstNameColumn, constants.firstName());
 		firstNameColumn
 				.setFieldUpdater(new FieldUpdater<ContactInfo, String>() {
 					public void update(int index, ContactInfo object,
@@ -126,7 +134,7 @@ public class MySampleDataGrid extends Composite {
 						return o1.getLastName().compareTo(o2.getLastName());
 					}
 				});
-		dataGrid.addColumn(lastNameColumn, "Last name");
+		dataGrid.addColumn(lastNameColumn, constants.lastName());
 		lastNameColumn.setFieldUpdater(new FieldUpdater<ContactInfo, String>() {
 			public void update(int index, ContactInfo object, String value) {
 				// onValueChange in cell
@@ -151,7 +159,7 @@ public class MySampleDataGrid extends Composite {
 			}
 		});
 		dataGrid.addColumn(ageColumn,
-				new SafeHtmlHeader(SafeHtmlUtils.fromSafeConstant("Age")));
+				new SafeHtmlHeader(SafeHtmlUtils.fromSafeConstant(constants.age())));
 		dataGrid.setColumnWidth(ageColumn, 5, Unit.PCT);
 
 		// Category.
@@ -195,7 +203,29 @@ public class MySampleDataGrid extends Composite {
 				return o1.getAddress().compareTo(o2.getAddress());
 			}
 		});
-		dataGrid.addColumn(addressColumn, "Address");
-		dataGrid.setColumnWidth(addressColumn, 55, Unit.PCT);
+		dataGrid.addColumn(addressColumn, constants.address());
+		dataGrid.setColumnWidth(addressColumn, 35, Unit.PCT);
+
+		// Remove action
+		ActionCell<ContactInfo> removeContactActionCell = new ActionCell<ContactInfo>("X", new Delegate<ContactInfo>() {
+			public void execute(ContactInfo object) {
+				// Unfortunately String.format doesn't work in GWT.
+				boolean proceed = Window.confirm(constants.deleteAttempt().replace("{0}", object.getFullName()));
+				if (proceed) {
+					ContactDatabase.get().removeContact(object);
+					ContactDatabase.get().refreshDisplays();
+				}
+			}
+		});
+		Column<ContactInfo, ContactInfo> removeColumn = new Column<ContactInfo, ContactInfo>(removeContactActionCell
+				){
+			@Override
+			public ContactInfo getValue(ContactInfo object) {
+				return object;
+			}
+		};
+		dataGrid.addColumn(removeColumn, "");
+		dataGrid.setColumnWidth(removeColumn, 5, Unit.PCT);
 	}
+
 }
